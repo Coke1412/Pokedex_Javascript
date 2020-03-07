@@ -29,6 +29,23 @@
         </button>
     </div>
 
+    <!-- Modal -->
+
+  
+    
+    <!-- Modal -->
+    <div class="modal fade" id="pokemon-info" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="pokemon-info-name" class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 <script>
 
     //cargar script luego de cargar documento
@@ -42,7 +59,8 @@
 
         //petición a la API para traer la info
         function getPokemons(url){
-            $('#more-prev-pokemons').hide();
+            
+
             $.ajax(url).done(function(res){
                pokemonList(res.results);
                 $('#more-next-pokemons').attr('data-next', res.next);
@@ -67,16 +85,29 @@
                         '<div class="card-body">'+
                             '<h4 class="card-title">'+ pokemon.name + '</h4>'+
                             
-                            '<a id="more-info" class="btn btn-success text-white" data-pokemon="'+ pokemon.url+'">¡Quiero saber más!</a>'+
+                            '<a id="more-info" class="btn btn-success text-white more-info" data-pokemon="'+ pokemon.url+'">¡Quiero saber más!</a>'+
                             
                         '</div>'+
                     '</div>'
                 );
             });
 
+
+
+            $('.more-info').click(function(event){
+
+                //capturar el botón al cual se le hizo click a través de la clase
+                $.ajax(event.target.dataset.pokemon)
+                    .done(function(res){
+                        console.log(res);
+                        $('#pokemon-info-name').html(res.name)
+                        $('#pokemon-info').modal();
+                    });
+
+                
+            })
+
         };
-
-
 
 
     });
