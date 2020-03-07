@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Pokédex</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>   
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-dark">
+    <div class="container text-center">
+        <div id="pokemons" class="col-md-4 offset-md-4"></div>
+       
+        
+        <button 
+            id="more-next-pokemons" 
+            class="btn btn-success text-white m-2" 
+            data-next=""
+            >
+                Más pokemones
+        </button>
+    </div>
+
+<script>
+
+    //cargar script luego de cargar documento
+    $(document).ready(function(){
+
+
+
+        //declarar endpoint e inicializar la petición al cargar
+        fetchUrl = 'https://pokeapi.co/api/v2/pokemon/'
+        getPokemons(fetchUrl);
+
+        //petición a la API para traer la info
+        function getPokemons(url){
+            $('#more-prev-pokemons').hide();
+            $.ajax(url).done(function(res){
+               pokemonList(res.results);
+                $('#more-next-pokemons').attr('data-next', res.next);
+            });
+        };
+
+        //realizar nueva petición a través del botón para traer más pokemones
+        //aquí abajito el 'this' se está refifierndo al botón
+        
+        
+        $('#more-next-pokemons').click(function(){
+            getPokemons(this.dataset.next)
+        });
+
+        //mostrar pokemones
+        function pokemonList(pokemonData){
+            $('#pokemons').html('');
+
+            pokemonData.forEach(function(pokemon){
+                $('#pokemons').append(
+                    '<div class="card m-3">'+
+                        '<div class="card-body">'+
+                            '<h4 class="card-title">'+ pokemon.name + '</h4>'+
+                            
+                            '<a id="more-info" class="btn btn-success text-white" data-pokemon="'+ pokemon.url+'">¡Quiero saber más!</a>'+
+                            
+                        '</div>'+
+                    '</div>'
+                );
+            });
+
+        };
+
+
+
+
+    });
+</script>
+</body>
+</html>
+
+
